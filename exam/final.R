@@ -1,0 +1,61 @@
+Airlines <- read.csv('AirlineDelay.csv')
+set.seed(15071)
+spl = sample(nrow(Airlines), 0.7*nrow(Airlines))
+AirlinesTrain = Airlines[spl,]
+AirlinesTest = Airlines[-spl,]
+dim(AirlinesTrain)
+dim(AirlinesTest)
+table(Airlines$TotalDelay)
+linear <- lm(TotalDelay~., data = AirlinesTrain)
+summary(linear)
+cor(AirlinesTrain$NumPrevFlights, AirlinesTrain$PrevFlightGap)
+cor(AirlinesTrain$OriginAvgWind, AirlinesTrain$OriginWindGust)
+predtest <- predict(linear, newdata = AirlinesTest)
+sum((predtest - AirlinesTest$TotalDelay)^2)
+Airlines$DelayClass = factor(ifelse(Airlines$TotalDelay == 0, "No Delay", ifelse(Airlines$TotalDelay >= 30, "Major Delay", "Minor Delay")))
+table(Airlines$DelayClass)
+Airlines$TotalDelay = NULL
+set.seed(15071)
+splnew = sample.split(Airlines$DelayClass, 0.7)
+AirlinesTrain = Airlines[splnew,]
+AirlinesTest = Airlines[-splnew,]
+cart <- rpart(DelayClass~., data = AirlinesTrain)
+summary(cart)
+predcart <- predict(cart, AirlinesTrain)
+table(predcart)
+
+eBay <- read.csv('ebay.csv', stringsAsFactors=FALSE)
+summary(eBay)
+table(eBay$size)
+attach(eBay)
+sold <- as.factor(sold)
+condition <- as.factor(condition)
+heel <- as.factor(heel)
+style <- as.factor(style)
+color <- as.factor(color)
+material <- as.factor(material)
+set.seed(144)
+library(caTools)
+spl = sample.split(eBay$sold, 0.7)
+training <- eBay[spl == TRUE, ]
+testing <- eBay[spl == FALSE, ]
+logit <- glm(sold~biddable+startprice+condition+heel+style+color+material, family=binomial)
+summary(logit)
+
+hubway <- read.csv('HubwayTrips.csv', stringsAsFactors=FALSE)
+dim(hubway)
+summary(hubway)
+attach(hubway)
+weekday <- hubway[Weekday==1, ]
+weekend <- hubway[Weekday==0, ]
+summary(weekday$Duration)
+summary(weekend$Duration)
+table(Morning)
+table(Afternoon)
+table(Evening)
+table(Male)
+136505/nrow(hubway)
+library(caret)
+preproc = preProcess(hubway)
+hubwayNorm = predict(preproc, hubway)
+summary(hubwayNorm)

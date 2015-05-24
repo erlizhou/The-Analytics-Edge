@@ -24,7 +24,6 @@ CorpusHeadline = Corpus(VectorSource(c(NewsTrain$Headline, NewsTest$Headline)))
 
 CorpusHeadline = tm_map(CorpusHeadline, tolower)
 
-
 # Remember this extra line is needed after running the tolower step:
 
 CorpusHeadline = tm_map(CorpusHeadline, PlainTextDocument)
@@ -34,7 +33,6 @@ CorpusHeadline = tm_map(CorpusHeadline, removePunctuation)
 CorpusHeadline = tm_map(CorpusHeadline, removeWords, stopwords("english"))
 
 CorpusHeadline = tm_map(CorpusHeadline, stemDocument)
-
 
 # Now we are ready to convert our corpus to a DocumentTermMatrix, remove sparse terms, and turn it into a data frame. 
 # We selected one particular threshold to remove sparse terms, but remember that you can try different numbers!
@@ -56,7 +54,6 @@ colnames(HeadlineWords) = make.names(colnames(HeadlineWords))
 
 HeadlineWordsTrain = head(HeadlineWords, nrow(NewsTrain))
 
-
 # The tail function takes the last "n" rows of HeadlineWords (the first argument to the tail function), where "n" is specified by the second argument to the tail function. 
 # So here we are taking the last nrow(NewsTest) observations from HeadlineWords, and putting them in a new data frame called "HeadlineWordsTest"
 
@@ -71,7 +68,6 @@ HeadlineWordsTrain$Popular = NewsTrain$Popular
 HeadlineWordsTrain$WordCount = NewsTrain$WordCount
 HeadlineWordsTest$WordCount = NewsTest$WordCount
 
-
 # Remember that you can always look at the structure of these data frames to understand what we have created
 
 
@@ -85,9 +81,9 @@ PredTest = predict(HeadlineWordsLog, newdata=HeadlineWordsTest, type="response")
 
 # Now we can prepare our submission file for Kaggle:
 
-MySubmission = data.frame(UniqueID = NewsTest$UniqueID, Probability1 = 0.1*PredTest + 0.9*logitpredict)
+MySubmission = data.frame(UniqueID = NewsTest$UniqueID, Probability1 = PredTest)
 
-write.csv(MySubmission, "Combined.csv", row.names=FALSE)
+write.csv(MySubmission, "SubmissionHeadlineLog.csv", row.names=FALSE)
 
 # You should upload the submission "SubmissionHeadlineLog.csv" on the Kaggle website to use this as a submission to the competition
 

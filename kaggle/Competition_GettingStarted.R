@@ -51,16 +51,7 @@ NewsTest$PubDate = strptime(NewsTest$PubDate, "%Y-%m-%d %H:%M:%S")
 
 NewsTrain$Weekday = NewsTrain$PubDate$wday
 NewsTest$Weekday = NewsTest$PubDate$wday
-NewsTrain$hour = NewsTrain$PubDate$hour
-NewsTest$hour = NewsTest$PubDate$hour
 
 # Weekday could now be used as an independent variable in your predictive models.
 
-# Simple logistic regression with 5 relevant parameters 
-summary(NewsTrain)
-head(NewsTrain)
-logit <- glm(Popular~WordCount+NewsDesk+SectionName+SubsectionName+Weekday+hour, data=NewsTrain, family=binomial)
-logitpredict <- predict(logit, newdata=NewsTest,type="response")
-logitSubmission = data.frame(UniqueID = NewsTest$UniqueID, Probability1 = logitpredict)
-write.csv(logitSubmission, "SubmissionSimpleLogistic.csv", row.names=FALSE)
 # For more fields that you can extract from a date/time object in R, see the help page ?POSIXlt
