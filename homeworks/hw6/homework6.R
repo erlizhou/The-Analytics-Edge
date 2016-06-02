@@ -1,4 +1,4 @@
-setwd("c:/users/erlizhou/Desktop/MOOC/The_Analytics_Edge")
+# DOCUMENT CLUSTERING WITH DAILY KOS
 dailykos = read.csv("dailykos.csv")
 dim(dailykos)
 distances <- dist(dailykos, method = "euclidean")
@@ -33,6 +33,7 @@ kmeanssummary(6)
 kmeanssummary(7)
 table(cluster, kmeans$cluster)
 
+# MARKET SEGMENTATION FOR AIRLINES
 airlines = read.csv("AirlinesCluster.csv")
 summary(airlines)
 library(caret)
@@ -57,6 +58,7 @@ kmeans1 <- kmeans(airlines, centers = 5, iter.max = 1000)
 table(kmeans1$cluster)
 kmeans1$centers
 
+# PREDICTING STOCK RETURNS WITH CLUSTER-THEN-PREDICT
 stocks <- read.csv("StocksCluster.csv")
 dim(stocks)
 head(stocks)
@@ -64,6 +66,8 @@ summary(stocks$PositiveDec)
 cor(stocks)
 lapply(stocks, mean)
 set.seed(144)
+install.packages("caTools")
+library(caTools)
 spl = sample.split(stocks$PositiveDec, SplitRatio = 0.7)
 stocksTrain = subset(stocks, spl == TRUE)
 stocksTest = subset(stocks, spl == FALSE)
